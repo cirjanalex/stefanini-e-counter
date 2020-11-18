@@ -8,7 +8,7 @@ namespace stefanini_e_counter.Logic
 {
 
     public interface IDocumentProcessor {
-        string CreateDocument(string user, string documentType);
+        string CreateDocument(string user, string reason);
     }
 
     public class DocumentProcessor: IDocumentProcessor

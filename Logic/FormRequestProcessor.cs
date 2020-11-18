@@ -14,11 +14,13 @@ namespace stefanini_e_counter.Logic
     {
         private readonly FormProcessingStrategy processingStrategy;
         private readonly IEmailFormProcessor emailProcessor;
+        private readonly IDocumentProcessor documentProcessor;
 
-        public FormRequestProcessor(IOptions<FormProcessingStrategy> processingStrategy, IEmailFormProcessor emailProcessor)
+        public FormRequestProcessor(IOptions<FormProcessingStrategy> processingStrategy, IEmailFormProcessor emailProcessor, IDocumentProcessor documentProcessor)
         {
             this.processingStrategy = processingStrategy.Value;
             this.emailProcessor = emailProcessor;
+            this.documentProcessor = documentProcessor;
         }
 
         public Task<FormRequestResponse> ProcessForm(BaseFormRequest request)
@@ -44,6 +46,8 @@ namespace stefanini_e_counter.Logic
                     await emailProcessor.ProcessMedicalFormRequest(request);
                     return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent};
                 case FormProcessingStrategyType.FillAndReturn:
+                    var documentId = documentProcessor.CreateDocument(request.User, request.PurposeOfTheRequest);
+                    return new FormRequestDocumentGeneratedResponse() { DocumentId = documentId};
                 case FormProcessingStrategyType.PrefillAndEmail:
                     throw new InvalidOperationException($"Cannot process a medical form request using {processingStrategy.MedicalForm} strategy");
                 default :
