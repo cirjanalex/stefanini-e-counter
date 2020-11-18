@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using stefanini_e_counter.Models;
 
@@ -6,19 +7,21 @@ namespace stefanini_e_counter.Logic
 {
     public interface IFormRequestProcessor
     {
-        FormRequestResponse ProcessForm(BaseFormRequest request);
+        Task<FormRequestResponse> ProcessForm(BaseFormRequest request);
     }
 
     public class FormRequestProcessor : IFormRequestProcessor
     {
         private readonly FormProcessingStrategy processingStrategy;
+        private readonly IEmailFormProcessor emailProcessor;
 
-        public FormRequestProcessor(IOptions<FormProcessingStrategy> processingStrategy)
+        public FormRequestProcessor(IOptions<FormProcessingStrategy> processingStrategy, IEmailFormProcessor emailProcessor)
         {
             this.processingStrategy = processingStrategy.Value;
+            this.emailProcessor = emailProcessor;
         }
 
-        public FormRequestResponse ProcessForm(BaseFormRequest request)
+        public Task<FormRequestResponse> ProcessForm(BaseFormRequest request)
         {
             switch (request)
             {
@@ -33,13 +36,13 @@ namespace stefanini_e_counter.Logic
             }
         }
 
-        private FormRequestResponse ProcessMedicalFormRequest(MedicalFormRequest request)
+        private async Task<FormRequestResponse> ProcessMedicalFormRequest(MedicalFormRequest request)
         {
             switch (processingStrategy.MedicalForm)
             {
                 case FormProcessingStrategyType.Email:
-                    return FormRequestResponse.ErrorResponse;
-
+                    await emailProcessor.ProcessMedicalFormRequest(request);
+                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent};
                 case FormProcessingStrategyType.FillAndReturn:
                 case FormProcessingStrategyType.PrefillAndEmail:
                     throw new InvalidOperationException($"Cannot process a medical form request using {processingStrategy.MedicalForm} strategy");
@@ -48,12 +51,13 @@ namespace stefanini_e_counter.Logic
             }
         }
 
-        private FormRequestResponse ProcessEmployeeFormRequest(EmployeeFormRequest request)
+        private async Task<FormRequestResponse> ProcessEmployeeFormRequest(EmployeeFormRequest request)
         {
             switch (processingStrategy.EmployeeForm)
             {
                 case FormProcessingStrategyType.Email:
-                    return FormRequestResponse.ErrorResponse;
+                    await emailProcessor.ProcessEmployeeFormRequest(request);
+                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent};
 
                 case FormProcessingStrategyType.FillAndReturn:
                 case FormProcessingStrategyType.PrefillAndEmail:
@@ -63,12 +67,13 @@ namespace stefanini_e_counter.Logic
             }
         }
 
-        private FormRequestResponse ProcessBankFormRequest(BankFormRequest request)
+        private async Task<FormRequestResponse> ProcessBankFormRequest(BankFormRequest request)
         {
             switch (processingStrategy.BankForm)
             {
                 case FormProcessingStrategyType.Email:
-                    return FormRequestResponse.ErrorResponse;
+                    await emailProcessor.ProcessBankFormRequest(request);
+                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent};
 
                 case FormProcessingStrategyType.FillAndReturn:
                 case FormProcessingStrategyType.PrefillAndEmail:
