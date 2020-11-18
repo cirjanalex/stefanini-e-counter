@@ -1,9 +1,13 @@
 
+using System;
 using System.IO;
+using DocumentFormat.OpenXml.Packaging;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
+using stefanini_e_counter.Logic;
 
 namespace stefanini_e_counter.Controllers
 {
@@ -11,10 +15,12 @@ namespace stefanini_e_counter.Controllers
     public class DocumentController : ControllerBase
     {
         private readonly IWebHostEnvironment _env;
+        private readonly IDocumentProcessor _processor;
 
-        public DocumentController(IWebHostEnvironment env)
+        public DocumentController(IWebHostEnvironment env, IDocumentProcessor processor)
         {
             _env = env;
+            _processor = processor;
         }
 
         [HttpGet]
@@ -29,5 +35,19 @@ namespace stefanini_e_counter.Controllers
             var docxMimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"; 
             return File(fileInfo.CreateReadStream(),docxMimeType, $"{guid}.docx" );
         }
+
+        [HttpGet]
+        [Route("new")]
+        [AllowAnonymous]
+        public IActionResult CreateNew()
+        {
+            string guid = _processor.CreateDocument("Sophiexam", "Hackathon 2020");
+            if ( guid == null )
+                return NotFound("reference certificate not available");
+            return Ok(guid);
+        } 
+
+
+
     }
 }
