@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -33,6 +34,7 @@ namespace stefanini_e_counter.Controllers
         [Route("bank")]
         public async Task<FormRequestResponse> RequestBankForm([FromBody] BankFormRequest bankFormRequest)
         {
+            Console.WriteLine(bankFormRequest.File);
             return await ProcessForm(bankFormRequest);
         }
 

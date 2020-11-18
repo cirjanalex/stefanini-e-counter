@@ -14,6 +14,7 @@ namespace stefanini_e_counter.Models
     public class EmployeeFormRequest : FormRequestWithPurpose { }
     public class BankFormRequest : BaseFormRequest 
     {
-        // pe undeva paci trebuie sa fie formularul
+        // pe undeva paci trebuie sa fie formularul        
+        public string File {get; init; }
     }
 }
