@@ -36,6 +36,7 @@ namespace stefanini_e_counter
             services.AddAuthentication("EzPzTokenAuth").AddScheme<AuthenticationSchemeOptions, EzPzAuthenticationHandler>("EzPzTokenAuth", null, null);
             services.AddAuthorization();
             services.AddSingleton<IFormRequestProcessor, FormRequestProcessor>();
+            services.AddSingleton<IDocumentProcessor, DocumentProcessor>();
             // Behind settings
             services.AddSwaggerGen();
         }
