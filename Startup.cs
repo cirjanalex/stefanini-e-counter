@@ -33,8 +33,23 @@ namespace stefanini_e_counter
             services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.Configure<ECounterAuthentication>(Configuration.GetSection("authentication"));
             services.Configure<FormProcessingStrategy>(Configuration.GetSection("formProcessingStrategy"));
+            services.Configure<EmailFormProcessorConfiguration>(Configuration.GetSection("emailFormMapping"));
+            
+            SmtpSettings smtpSettings = new SmtpSettings()
+            {
+                Server = Environment.GetEnvironmentVariable("MAILGUN_SMTP_SERVER"),
+                Port = Convert.ToInt32(Environment.GetEnvironmentVariable("MAILGUN_SMTP_PORT")),
+                UserName = Environment.GetEnvironmentVariable("MAILGUN_SMTP_LOGIN"),
+                Password = Environment.GetEnvironmentVariable("MAILGUN_SMTP_PASSWORD"),
+                SenderName = "Sophie-E-Counter",
+                SenderEmail = "noreply@stefanini-e-counter.com"
+            };
+            Console.WriteLine(smtpSettings);
+            services.AddSingleton<SmtpSettings>((serviceProvider) => smtpSettings);
+
             services.AddAuthentication("EzPzTokenAuth").AddScheme<AuthenticationSchemeOptions, EzPzAuthenticationHandler>("EzPzTokenAuth", null, null);
             services.AddAuthorization();
+            services.AddSingleton<IEmailFormProcessor, EmailFormProcessor>();
             services.AddSingleton<IFormRequestProcessor, FormRequestProcessor>();
             // Behind settings
             services.AddSwaggerGen();

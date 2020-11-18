@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using stefanini_e_counter.Logic;
@@ -16,33 +17,30 @@ namespace stefanini_e_counter.Controllers
         }
         [HttpPost]
         [Route("medical")]
-        public FormRequestResponse RequestMedicalForm([FromBody] MedicalFormRequest medicalFormRequest)
+        public async Task<FormRequestResponse> RequestMedicalForm([FromBody] MedicalFormRequest medicalFormRequest)
         {
-            return ProcessForm(medicalFormRequest);
+            return await ProcessForm(medicalFormRequest);
         }
 
         [HttpPost]
         [Route("employee")]
-        public FormRequestResponse RequestEmployeeForm([FromBody] EmployeeFormRequest employeeFormRequest)
+        public async Task<FormRequestResponse> RequestEmployeeForm([FromBody] EmployeeFormRequest employeeFormRequest)
         {
-            //return ProcessForm(employeeFormRequest);
-            return new FormRequestResponse() {
-                ResponseType = FormRequestResponseType.EmailSent
-            };
+            return await ProcessForm(employeeFormRequest);
         }
 
         [HttpPost]
         [Route("bank")]
-        public FormRequestResponse RequestBankForm([FromBody] BankFormRequest bankFormRequest)
+        public async Task<FormRequestResponse> RequestBankForm([FromBody] BankFormRequest bankFormRequest)
         {
-            return ProcessForm(bankFormRequest);
+            return await ProcessForm(bankFormRequest);
         }
 
-        private FormRequestResponse ProcessForm(BaseFormRequest formRequest)
+        private async Task<FormRequestResponse> ProcessForm(BaseFormRequest formRequest)
         {
             try
             {
-                return formProcessor.ProcessForm(formRequest);
+                return await formProcessor.ProcessForm(formRequest);
             }
             catch
             {
