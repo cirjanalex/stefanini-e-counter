@@ -1,5 +1,8 @@
 using System;
+using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using stefanini_e_counter.Logic;
@@ -31,11 +34,34 @@ namespace stefanini_e_counter.Controllers
         }
 
         [HttpPost]
-        [Route("bank")]
-        public async Task<FormRequestResponse> RequestBankForm([FromBody] BankFormRequest bankFormRequest)
+        [Route("bank")]        
+        public async Task<FormRequestResponse> RequestBankForm([FromQuery] string user)
         {
-            Console.WriteLine(bankFormRequest.File);
-            return await ProcessForm(bankFormRequest);
+            IFormFile bankForm = Request.Form.Files.FirstOrDefault();
+            if(bankForm == null)
+            {
+                Response.StatusCode = 400;
+                return FormRequestResponse.ErrorResponse;
+            }
+
+            return await ProcessForm(new BankFormRequest() { 
+                File = bankForm,
+                User = user
+            });
+        }
+
+        [HttpPost]
+        [Route("bankstandard")]        
+        public async Task<FormRequestResponse> RequestStandardBankForm([FromBody] StandardBankFormRequest request)
+        {
+            return await ProcessForm(request);
+        }
+        
+        [HttpPost]
+        [Route("other")]        
+        public async Task<FormRequestResponse> OtherForm([FromBody] FormRequestWithPurpose request)
+        {
+            return await ProcessForm(request);
         }
 
         private async Task<FormRequestResponse> ProcessForm(BaseFormRequest formRequest)

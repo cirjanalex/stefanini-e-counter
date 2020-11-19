@@ -1,0 +1,1 @@
+heroku logs -a stefanini-e-counter

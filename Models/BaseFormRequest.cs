@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace stefanini_e_counter.Models
 {
     public class BaseFormRequest
@@ -12,9 +14,11 @@ namespace stefanini_e_counter.Models
 
     public class MedicalFormRequest : FormRequestWithPurpose { }
     public class EmployeeFormRequest : FormRequestWithPurpose { }
+    public class StandardBankFormRequest : BaseFormRequest 
+    {
+    }
     public class BankFormRequest : BaseFormRequest 
     {
-        // pe undeva paci trebuie sa fie formularul        
-        public string File {get; init; }
+        public IFormFile File { get; init; }
     }
 }

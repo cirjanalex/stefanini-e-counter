@@ -7,5 +7,6 @@ namespace stefanini_e_counter.Logic
         public string MedicalForm { get; set; }
         public string EmployeeForm { get; set; }
         public string BankForm { get; set; }
+        public string OtherForm { get; set; }
     }
 }

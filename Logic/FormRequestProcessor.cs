@@ -33,6 +33,10 @@ namespace stefanini_e_counter.Logic
                     return ProcessEmployeeFormRequest(employeeFormRequest);
                 case BankFormRequest bankFormRequest:
                     return ProcessBankFormRequest(bankFormRequest);
+                case StandardBankFormRequest standardBankFormRequest:
+                    return ProcessStandardBankFormRequest(standardBankFormRequest);
+                case FormRequestWithPurpose otherRequest:
+                    return ProcessOtherFormRequest(otherRequest);
                 default:
                     throw new ArgumentException($"Unkown type of request {request.GetType()}");
             }
@@ -44,13 +48,13 @@ namespace stefanini_e_counter.Logic
             {
                 case FormProcessingStrategyType.Email:
                     await emailProcessor.ProcessMedicalFormRequest(request);
-                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent};
+                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent };
                 case FormProcessingStrategyType.FillAndReturn:
                     var documentId = documentProcessor.CreateDocument(request.User, request.PurposeOfTheRequest);
-                    return new FormRequestDocumentGeneratedResponse() { DocumentId = documentId};
+                    return new FormRequestDocumentGeneratedResponse() { DocumentId = documentId };
                 case FormProcessingStrategyType.PrefillAndEmail:
                     throw new InvalidOperationException($"Cannot process a medical form request using {processingStrategy.MedicalForm} strategy");
-                default :
+                default:
                     throw new ArgumentException($"Unkown type of strategy for Medical Form Request {processingStrategy.MedicalForm}");
             }
         }
@@ -61,12 +65,12 @@ namespace stefanini_e_counter.Logic
             {
                 case FormProcessingStrategyType.Email:
                     await emailProcessor.ProcessEmployeeFormRequest(request);
-                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent};
+                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent };
 
                 case FormProcessingStrategyType.FillAndReturn:
                 case FormProcessingStrategyType.PrefillAndEmail:
                     throw new InvalidOperationException($"Cannot process a employee form request using {processingStrategy.EmployeeForm} strategy");
-                default :
+                default:
                     throw new ArgumentException($"Unkown type of strategy for Employee Form Request {processingStrategy.EmployeeForm}");
             }
         }
@@ -77,14 +81,36 @@ namespace stefanini_e_counter.Logic
             {
                 case FormProcessingStrategyType.Email:
                     await emailProcessor.ProcessBankFormRequest(request);
-                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent};
+                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent };
 
                 case FormProcessingStrategyType.FillAndReturn:
                 case FormProcessingStrategyType.PrefillAndEmail:
                     throw new InvalidOperationException($"Cannot process a bank form request using {processingStrategy.BankForm} strategy");
-                default :
+                default:
                     throw new ArgumentException($"Unkown type of strategy for Bank Form Request {processingStrategy.BankForm}");
             }
+        }
+
+        private async Task<FormRequestResponse> ProcessStandardBankFormRequest(StandardBankFormRequest request)
+        {
+            switch (processingStrategy.StandardBankForm)
+            {
+                case FormProcessingStrategyType.Email:
+                    await emailProcessor.ProcessStandardBankFormRequest(request);
+                    return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent };
+
+                case FormProcessingStrategyType.FillAndReturn:
+                case FormProcessingStrategyType.PrefillAndEmail:
+                    throw new InvalidOperationException($"Cannot process a standard bank form request using {processingStrategy.BankForm} strategy");
+                default:
+                    throw new ArgumentException($"Unkown type of strategy for Standard Bank Form Request {processingStrategy.BankForm}");
+            }
+        }
+
+        private async Task<FormRequestResponse> ProcessOtherFormRequest(FormRequestWithPurpose request)
+        {
+            await emailProcessor.ProcessOtherFormRequest(request);
+            return new FormRequestResponse() { ResponseType = FormRequestResponseType.EmailSent };
         }
     }
 }
