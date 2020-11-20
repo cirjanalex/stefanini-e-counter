@@ -8,5 +8,6 @@ namespace stefanini_e_counter.Logic
         public string EmployeeForm { get; set; }
         public string BankForm { get; set; }
         public string OtherForm { get; set; }
+        public string Feedback { get; set; }
     }
 }

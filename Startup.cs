@@ -52,6 +52,7 @@ namespace stefanini_e_counter
             services.AddSingleton<IEmailFormProcessor, EmailFormProcessor>();
             services.AddSingleton<IFormRequestProcessor, FormRequestProcessor>();
             services.AddSingleton<IDocumentProcessor, DocumentProcessor>();
+            services.AddSingleton<IEmailService, EmailService>();
             // Behind settings
             services.AddSwaggerGen();
         }
