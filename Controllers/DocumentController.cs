@@ -47,6 +47,27 @@ namespace stefanini_e_counter.Controllers
             return Ok(guid);
         } 
 
+        [HttpGet]
+        [Route("dan")]
+        [AllowAnonymous]
+        public IActionResult CreateDan()
+        {
+            string guid = _processor.CreateDocument("Dan Magirescu", string.Empty);
+            if ( guid == null )
+                return NotFound("reference certificate not available");
+            return Ok(guid);
+        } 
+
+        [HttpGet]
+        [Route("alex")]
+        [AllowAnonymous]
+        public IActionResult CreateAlexandra()
+        {
+            string guid = _processor.CreateDocument("Alexandra Ungureanu", string.Empty);
+            if ( guid == null )
+                return NotFound("reference certificate not available");
+            return Ok(guid);
+        } 
 
 
     }

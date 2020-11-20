@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Packaging;
 using Microsoft.AspNetCore.Hosting;
 using DocumentFormat.OpenXml.Wordprocessing;
 using stefanini_e_counter.Models;
+using System.Collections.Generic;
 
 namespace stefanini_e_counter.Logic
 {
@@ -37,7 +38,18 @@ namespace stefanini_e_counter.Logic
             // https://stackoverflow.com/questions/18316873/replace-text-in-word-document-using-open-xml
             using (WordprocessingDocument doc = WordprocessingDocument.Open(newFilePath, true)) 
             { 
-                var data = DocumentData.NewData(user, documentType);
+                Dictionary<DocumentFieldsEnum,string> data;
+                switch(user.ToLower()) {
+                    case "alexandra ungureanu":
+                        data = DocumentData.DataForAlexandraUngureanu(documentType);
+                        break;
+                    case "dan magirescu":
+                        data = DocumentData.DataForDanMagirescu(documentType);
+                        break;
+                    default:
+                        data = DocumentData.NewData(user, documentType);
+                        break;
+                }
                 foreach(var pair in data) {
                     ReplaceText(doc, DocumentData.DocumentFields[pair.Key], pair.Value);
                 }

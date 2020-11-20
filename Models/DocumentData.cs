@@ -17,9 +17,9 @@ namespace stefanini_e_counter.Models
             { DocumentFieldsEnum.De_la, "«De_la»"},
             { DocumentFieldsEnum.Adresa_concatenata, "«Adresa_concatenata»"},
             { DocumentFieldsEnum.Data_angajare, "«Data_Angajare»"},
-            { DocumentFieldsEnum.Zile_concediu_luate, "……….."},
+            { DocumentFieldsEnum.Zile_concediu_luate, "«Nr_zile»"},
             { DocumentFieldsEnum.Data_curenta, "31.10.2020"},
-            { DocumentFieldsEnum.Medicul_de_familie, "medicul de familie"}
+            { DocumentFieldsEnum.Medicul_de_familie, "«Medic_de_Familie»"}
         };
 
         private static int _nextId = 0; 
@@ -35,7 +35,7 @@ namespace stefanini_e_counter.Models
             newData[DocumentFieldsEnum.De_la] = $"{seed}-EliberatData";
             newData[DocumentFieldsEnum.Adresa_concatenata] = $"{seed}-Adresa";
             newData[DocumentFieldsEnum.Data_angajare] = $"{seed}-Angajare";
-            newData[DocumentFieldsEnum.Zile_concediu_luate] = "....0....";
+            newData[DocumentFieldsEnum.Zile_concediu_luate] = "0";
             newData[DocumentFieldsEnum.Data_curenta] = DateTime.Now.ToShortDateString().ToString();
             newData[DocumentFieldsEnum.Medicul_de_familie] = reason;
 
@@ -60,6 +60,41 @@ namespace stefanini_e_counter.Models
             .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        public static Dictionary<DocumentFieldsEnum,string> DataForAlexandraUngureanu(string documentType) {
+            var newData = new Dictionary<DocumentFieldsEnum, string>();
+            newData[DocumentFieldsEnum.Cerere_nr_inregistrare] = $"{Interlocked.Increment(ref _nextId)}";
+            newData[DocumentFieldsEnum.Cerere_data] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Nume_Prenume] = $"Alexandra Ungureanu";
+            newData[DocumentFieldsEnum.CNP] = RandomNumberString(13);
+            newData[DocumentFieldsEnum.Act_Identitate] = $"IF 123456";
+            newData[DocumentFieldsEnum.Eliberat_de] = $"IPJCJ Ilfov";
+            newData[DocumentFieldsEnum.De_la] = $"10.10.2015";
+            newData[DocumentFieldsEnum.Adresa_concatenata] = $"Strada Florilor nr 89";
+            newData[DocumentFieldsEnum.Data_angajare] = $"15.04.2014";
+            newData[DocumentFieldsEnum.Zile_concediu_luate] = "0";
+            newData[DocumentFieldsEnum.Data_curenta] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Medicul_de_familie] = string.IsNullOrEmpty(documentType)?"calatorit la Suceava":documentType;
+
+            return newData;
+        }
+
+        public static Dictionary<DocumentFieldsEnum,string> DataForDanMagirescu(string documentType) {
+            var newData = new Dictionary<DocumentFieldsEnum, string>();
+            newData[DocumentFieldsEnum.Cerere_nr_inregistrare] = $"{Interlocked.Increment(ref _nextId)}";
+            newData[DocumentFieldsEnum.Cerere_data] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Nume_Prenume] = $"Dan Magirescu";
+            newData[DocumentFieldsEnum.CNP] = RandomNumberString(13);
+            newData[DocumentFieldsEnum.Act_Identitate] = $"RD 898989";
+            newData[DocumentFieldsEnum.Eliberat_de] = $"Sector 5 Bucuresti";
+            newData[DocumentFieldsEnum.De_la] = $"01.03.2005";
+            newData[DocumentFieldsEnum.Adresa_concatenata] = $"Bulevardul Revolutiei 53";
+            newData[DocumentFieldsEnum.Data_angajare] = $"07.07.2001";
+            newData[DocumentFieldsEnum.Zile_concediu_luate] = "0";
+            newData[DocumentFieldsEnum.Data_curenta] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Medicul_de_familie] = string.IsNullOrEmpty(documentType)?"medicul veterinar":documentType;
+
+            return newData;
+        }
         
     }
     public enum DocumentFieldsEnum
