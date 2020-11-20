@@ -44,7 +44,7 @@ namespace stefanini_e_counter.Controllers
             string guid = _processor.CreateDocument("Sophiexam", "Hackathon 2020");
             if ( guid == null )
                 return NotFound("reference certificate not available");
-            return Ok(guid);
+            return Content(GetLink("new", guid), "text/html");
         } 
 
         [HttpGet]
@@ -55,7 +55,8 @@ namespace stefanini_e_counter.Controllers
             string guid = _processor.CreateDocument("Dan Magirescu", string.Empty);
             if ( guid == null )
                 return NotFound("reference certificate not available");
-            return Ok(guid);
+            
+            return Content(GetLink("dan", guid), "text/html");
         } 
 
         [HttpGet]
@@ -66,9 +67,21 @@ namespace stefanini_e_counter.Controllers
             string guid = _processor.CreateDocument("Alexandra Ungureanu", string.Empty);
             if ( guid == null )
                 return NotFound("reference certificate not available");
-            return Ok(guid);
+            return Content(GetLink("alex", guid), "text/html");
         } 
 
 
+        private string GetLink(string initialRoute, string guid) {
+            var pathRoot = Request.Path.ToUriComponent();
+            pathRoot = pathRoot.Substring(0, pathRoot.Length-initialRoute.Length);
+            var absoluteUri = string.Concat(
+                        Request.Scheme,
+                        "://",
+                        Request.Host.ToUriComponent(),
+                        Request.PathBase.ToUriComponent(),
+                        pathRoot,
+                        guid);
+            return $"<a href='{absoluteUri}' target=_blank>{absoluteUri}</a>";         
+        }
     }
 }
