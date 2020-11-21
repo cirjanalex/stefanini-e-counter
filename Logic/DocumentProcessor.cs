@@ -23,7 +23,7 @@ namespace stefanini_e_counter.Logic
             _env = env;
         }
         
-        public string CreateDocument(string user, string documentType) {
+        public string CreateDocument(string user, string reason) {
 
             var refFileInfo = _env.ContentRootFileProvider.GetFileInfo($"Resources/{ReferenceDocName}.docx");
             if ( !refFileInfo.Exists )
@@ -41,13 +41,13 @@ namespace stefanini_e_counter.Logic
                 Dictionary<DocumentFieldsEnum,string> data;
                 switch(user.ToLower()) {
                     case "alexandra ungureanu":
-                        data = DocumentData.DataForAlexandraUngureanu(documentType);
+                        data = DocumentData.DataForAlexandraUngureanu(reason);
                         break;
                     case "dan magirescu":
-                        data = DocumentData.DataForDanMagirescu(documentType);
+                        data = DocumentData.DataForDanMagirescu(reason);
                         break;
                     default:
-                        data = DocumentData.NewData(user, documentType);
+                        data = DocumentData.NewData(user, reason);
                         break;
                 }
                 foreach(var pair in data) {

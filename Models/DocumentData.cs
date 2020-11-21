@@ -61,7 +61,7 @@ namespace stefanini_e_counter.Models
             .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public static Dictionary<DocumentFieldsEnum,string> DataForAlexandraUngureanu(string documentType) {
+        public static Dictionary<DocumentFieldsEnum,string> DataForAlexandraUngureanu(string reason) {
             var newData = new Dictionary<DocumentFieldsEnum, string>();
             newData[DocumentFieldsEnum.Cerere_nr_inregistrare] = $"{Interlocked.Increment(ref _nextId)}";
             newData[DocumentFieldsEnum.Cerere_data] = Today;
@@ -74,12 +74,12 @@ namespace stefanini_e_counter.Models
             newData[DocumentFieldsEnum.Data_angajare] = $"15.04.2014";
             newData[DocumentFieldsEnum.Zile_concediu_luate] = "0";
             newData[DocumentFieldsEnum.Data_curenta] = Today;
-            newData[DocumentFieldsEnum.Medicul_de_familie] = string.IsNullOrEmpty(documentType)?"calatorit la Suceava":documentType;
+            newData[DocumentFieldsEnum.Medicul_de_familie] = string.IsNullOrEmpty(reason)?"calatorit la Suceava":reason;
 
             return newData;
         }
 
-        public static Dictionary<DocumentFieldsEnum,string> DataForDanMagirescu(string documentType) {
+        public static Dictionary<DocumentFieldsEnum,string> DataForDanMagirescu(string reason) {
             var newData = new Dictionary<DocumentFieldsEnum, string>();
             newData[DocumentFieldsEnum.Cerere_nr_inregistrare] = $"{Interlocked.Increment(ref _nextId)}";
             newData[DocumentFieldsEnum.Cerere_data] = Today;
@@ -92,7 +92,7 @@ namespace stefanini_e_counter.Models
             newData[DocumentFieldsEnum.Data_angajare] = "07.07.2001";
             newData[DocumentFieldsEnum.Zile_concediu_luate] = "0";
             newData[DocumentFieldsEnum.Data_curenta] = Today;
-            newData[DocumentFieldsEnum.Medicul_de_familie] = string.IsNullOrEmpty(documentType)?"medicul veterinar":documentType;
+            newData[DocumentFieldsEnum.Medicul_de_familie] = string.IsNullOrEmpty(reason)?"medicul veterinar":reason;
 
             return newData;
         }
