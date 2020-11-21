@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 
@@ -27,7 +28,7 @@ namespace stefanini_e_counter.Models
         public static Dictionary<DocumentFieldsEnum,string> NewData(string seed, string reason) {
             var newData = new Dictionary<DocumentFieldsEnum, string>();
             newData[DocumentFieldsEnum.Cerere_nr_inregistrare] = $"{Interlocked.Increment(ref _nextId)}";
-            newData[DocumentFieldsEnum.Cerere_data] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Cerere_data] = Today;
             newData[DocumentFieldsEnum.Nume_Prenume] = $"{seed}-NP";
             newData[DocumentFieldsEnum.CNP] = RandomNumberString(13);
             newData[DocumentFieldsEnum.Act_Identitate] = $"{seed}-CI";
@@ -36,7 +37,7 @@ namespace stefanini_e_counter.Models
             newData[DocumentFieldsEnum.Adresa_concatenata] = $"{seed}-Adresa";
             newData[DocumentFieldsEnum.Data_angajare] = $"{seed}-Angajare";
             newData[DocumentFieldsEnum.Zile_concediu_luate] = "0";
-            newData[DocumentFieldsEnum.Data_curenta] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Data_curenta] = Today;
             newData[DocumentFieldsEnum.Medicul_de_familie] = reason;
 
             return newData;
@@ -63,7 +64,7 @@ namespace stefanini_e_counter.Models
         public static Dictionary<DocumentFieldsEnum,string> DataForAlexandraUngureanu(string documentType) {
             var newData = new Dictionary<DocumentFieldsEnum, string>();
             newData[DocumentFieldsEnum.Cerere_nr_inregistrare] = $"{Interlocked.Increment(ref _nextId)}";
-            newData[DocumentFieldsEnum.Cerere_data] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Cerere_data] = Today;
             newData[DocumentFieldsEnum.Nume_Prenume] = $"Alexandra Ungureanu";
             newData[DocumentFieldsEnum.CNP] = RandomNumberString(13);
             newData[DocumentFieldsEnum.Act_Identitate] = $"IF 123456";
@@ -72,7 +73,7 @@ namespace stefanini_e_counter.Models
             newData[DocumentFieldsEnum.Adresa_concatenata] = $"Strada Florilor nr 89";
             newData[DocumentFieldsEnum.Data_angajare] = $"15.04.2014";
             newData[DocumentFieldsEnum.Zile_concediu_luate] = "0";
-            newData[DocumentFieldsEnum.Data_curenta] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Data_curenta] = Today;
             newData[DocumentFieldsEnum.Medicul_de_familie] = string.IsNullOrEmpty(documentType)?"calatorit la Suceava":documentType;
 
             return newData;
@@ -81,19 +82,25 @@ namespace stefanini_e_counter.Models
         public static Dictionary<DocumentFieldsEnum,string> DataForDanMagirescu(string documentType) {
             var newData = new Dictionary<DocumentFieldsEnum, string>();
             newData[DocumentFieldsEnum.Cerere_nr_inregistrare] = $"{Interlocked.Increment(ref _nextId)}";
-            newData[DocumentFieldsEnum.Cerere_data] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Cerere_data] = Today;
             newData[DocumentFieldsEnum.Nume_Prenume] = $"Dan Magirescu";
             newData[DocumentFieldsEnum.CNP] = RandomNumberString(13);
             newData[DocumentFieldsEnum.Act_Identitate] = $"RD 898989";
             newData[DocumentFieldsEnum.Eliberat_de] = $"Sector 5 Bucuresti";
             newData[DocumentFieldsEnum.De_la] = $"01.03.2005";
             newData[DocumentFieldsEnum.Adresa_concatenata] = $"Bulevardul Revolutiei 53";
-            newData[DocumentFieldsEnum.Data_angajare] = $"07.07.2001";
+            newData[DocumentFieldsEnum.Data_angajare] = "07.07.2001";
             newData[DocumentFieldsEnum.Zile_concediu_luate] = "0";
-            newData[DocumentFieldsEnum.Data_curenta] = DateTime.Now.ToShortDateString().ToString();
+            newData[DocumentFieldsEnum.Data_curenta] = Today;
             newData[DocumentFieldsEnum.Medicul_de_familie] = string.IsNullOrEmpty(documentType)?"medicul veterinar":documentType;
 
             return newData;
+        }
+
+        public static string Today {
+            get {
+                return DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture); //ToShortDateString().ToString();
+            }
         }
         
     }
